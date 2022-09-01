@@ -96,34 +96,7 @@ definitions:
 info:
   contact: {}
 paths:
-  /comment:
-    post:
-      consumes:
-      - application/json
-      description: Create New Comment
-      parameters:
-      - description: comment data
-        in: body
-        name: ticket
-        required: true
-        schema:
-          $ref: '#/definitions/app.CommentCreateModel'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.CommentModel'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/common.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/common.Error'
-  /comment/{commentId}:
+  /admin/comment/{commentId}:
     post:
       consumes:
       - application/json
@@ -154,70 +127,22 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/common.Error'
-  /comment/{key}:
-    get:
+      tags:
+      - comment
+  /admin/comment/{commentId}/reject:
+    post:
       consumes:
       - application/json
       description: Confirm Ticket
       parameters:
-      - description: comment group key
+      - description: comment id
         in: path
-        name: key
+        name: commentId
         required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/app.CommentModel'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/common.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/common.Error'
-  /ticket:
-    post:
-      consumes:
-      - application/json
-      description: Create New Ticket
-      parameters:
-      - description: ticket data
-        in: body
-        name: ticket
-        required: true
-        schema:
-          $ref: '#/definitions/app.TicketCreateModel'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.TicketModel'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/common.Error'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/common.Error'
-  /ticket/{ticketId}:
-    get:
-      consumes:
-      - application/json
-      description: Get Ticket By Id
-      parameters:
-      - description: ticket id
-        in: path
-        name: ticketId
+        type: integer
+      - description: user id
+        in: query
+        name: userId
         required: true
         type: integer
       produces:
@@ -226,7 +151,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/app.TicketModel'
+            $ref: '#/definitions/app.CommentModel'
         "400":
           description: Bad Request
           schema:
@@ -235,6 +160,9 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/common.Error'
+      tags:
+      - comment
+  /admin/ticket/{ticketId}:
     post:
       consumes:
       - application/json
@@ -265,6 +193,167 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/common.Error'
+      tags:
+      - ticket
+  /comment:
+    post:
+      consumes:
+      - application/json
+      description: Create New Comment
+      parameters:
+      - description: comment data
+        in: body
+        name: ticket
+        required: true
+        schema:
+          $ref: '#/definitions/app.CommentCreateModel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.CommentModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.Error'
+      tags:
+      - comment
+  /comment/{commentId}/react:
+    post:
+      consumes:
+      - application/json
+      description: Confirm Ticket
+      parameters:
+      - description: comment id
+        in: path
+        name: commentId
+        required: true
+        type: integer
+      - description: user id
+        in: query
+        name: userId
+        required: true
+        type: integer
+      - description: client id
+        in: query
+        name: clientId
+        required: true
+        type: string
+      - description: react type
+        in: query
+        name: reactType
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.CommentModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.Error'
+      tags:
+      - comment
+  /comment/{key}:
+    get:
+      consumes:
+      - application/json
+      description: Confirm Ticket
+      parameters:
+      - description: comment group key
+        in: path
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/app.CommentModel'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.Error'
+      tags:
+      - comment
+  /ticket:
+    post:
+      consumes:
+      - application/json
+      description: Create New Ticket
+      parameters:
+      - description: ticket data
+        in: body
+        name: ticket
+        required: true
+        schema:
+          $ref: '#/definitions/app.TicketCreateModel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.TicketModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.Error'
+      tags:
+      - ticket
+  /ticket/{ticketId}:
+    get:
+      consumes:
+      - application/json
+      description: Get Ticket By Id
+      parameters:
+      - description: ticket id
+        in: path
+        name: ticketId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.TicketModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.Error'
+      tags:
+      - ticket
   /tickets:
     post:
       consumes:
@@ -290,4 +379,6 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/common.Error'
+      tags:
+      - ticket
 swagger: "2.0"

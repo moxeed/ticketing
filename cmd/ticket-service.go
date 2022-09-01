@@ -12,6 +12,7 @@ func InvalidRequest(g *gin.Context, valid interface{}) {
 }
 
 // CreateTicket godoc
+// @Tags         ticket
 // @Description  Create New Ticket
 // @Accept       json
 // @Produce      json
@@ -34,6 +35,7 @@ func CreateTicket(g *gin.Context) {
 }
 
 // CloseTicket godoc
+// @Tags         ticket
 // @Description  Close Ticket
 // @Accept       json
 // @Produce      json
@@ -42,7 +44,7 @@ func CreateTicket(g *gin.Context) {
 // @Success      200  {object}  app.TicketModel
 // @Failure      400  {object}  common.Error
 // @Failure      404  {object}  common.Error
-// @Router       /ticket/{ticketId} [post]
+// @Router       /admin/ticket/{ticketId} [post]
 func CloseTicket(g *gin.Context) {
 	var ticketId uint64
 	var successful bool
@@ -66,6 +68,7 @@ func CloseTicket(g *gin.Context) {
 }
 
 // GetTicket godoc
+// @Tags         ticket
 // @Description  Get Ticket By Id
 // @Accept       json
 // @Produce      json
@@ -88,6 +91,7 @@ func GetTicket(g *gin.Context) {
 }
 
 // GetTickets godoc
+// @Tags         ticket
 // @Description  Get Tickets By Filter Model
 // @Accept       json
 // @Produce      json

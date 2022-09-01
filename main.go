@@ -14,15 +14,23 @@ func main() {
 	docs.SwaggerInfo.Title = "ticketing"
 	router := gin.Default()
 
-	router.POST("/ticket", cmd.CreateTicket)
-	router.POST("/ticket/:ticketId", cmd.CloseTicket)
+	ticket := router.Group("/ticket")
+	ticket.POST("", cmd.CreateTicket)
+	ticket.GET(":ticketId", cmd.GetTicket)
 
-	router.POST("/tickets", cmd.GetTickets)
-	router.GET("/ticket/:ticketId", cmd.GetTicket)
+	comment := router.Group("/comment")
+	comment.GET(":key", cmd.GetComments)
+	comment.POST("", cmd.CreateComment)
+	comment.POST(":commentId/react", cmd.ReactComment)
 
-	router.GET("/comment/:key", cmd.GetComments)
-	router.POST("/comment", cmd.CreateComment)
-	router.POST("/admin/comment/:commentId", cmd.ConfirmComment)
+	admin := router.Group("/admin")
+
+	adminComment := admin.Group("comment")
+	adminComment.POST(":commentId", cmd.ConfirmComment)
+	adminComment.POST(":commentId/reject", cmd.RejectComment)
+
+	adminTicket := admin.Group("ticket")
+	adminTicket.POST(":ticketId", cmd.CloseTicket)
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 

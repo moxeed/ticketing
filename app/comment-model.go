@@ -11,7 +11,7 @@ type CommentCreateModel struct {
 }
 
 type CommentModel struct {
-	ID           uint
+	Id           uint
 	UserId       *int
 	UserName     string
 	Content      string
