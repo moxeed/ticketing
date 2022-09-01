@@ -1,0 +1,4 @@
+{
+  "databaseDsn": "sqlserver://sa:1qaz@WSX@localhost:1433?database=Ticketing",
+  "listenPort": 9043
+}

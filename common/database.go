@@ -10,7 +10,7 @@ import (
 )
 
 func OpenDb() *gorm.DB {
-	dsn := "sqlserver://sa:1qaz@WSX@localhost:1433?database=Ticketing"
+	dsn := Configuration.DataBaseDsn
 	db, err := gorm.Open(sqlserver.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,

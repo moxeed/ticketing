@@ -11,12 +11,12 @@ type CommentCreateModel struct {
 }
 
 type CommentModel struct {
-	Id           uint
-	UserId       *int
-	UserName     string
-	Content      string
-	CreatedAt    time.Time
-	LikeCount    int
-	DisLikeCount int
-	ReplyToId    *uint
+	Id           uint      `json:"id,omitempty"`
+	UserId       *int      `json:"userId,omitempty"`
+	UserName     string    `json:"userName,omitempty"`
+	Content      string    `json:"content,omitempty"`
+	CreatedAt    time.Time `json:"createdAt"`
+	LikeCount    int       `json:"likeCount,omitempty"`
+	DisLikeCount int       `json:"disLikeCount,omitempty"`
+	ReplyToId    *uint     `json:"replyToId,omitempty"`
 }

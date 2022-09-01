@@ -89,25 +89,3 @@ func GetTicket(g *gin.Context) {
 
 	g.JSON(200, result)
 }
-
-// GetTickets godoc
-// @Tags         ticket
-// @Description  Get Tickets By Filter Model
-// @Accept       json
-// @Produce      json
-// @Param        filterModel body app.TicketFilterModel true "filters"
-// @Success      200  {array}  app.TicketModel
-// @Failure      400  {object}  common.Error
-// @Router       /tickets [post]
-func GetTickets(g *gin.Context) {
-	model := app.TicketFilterModel{}
-	if err := g.BindJSON(&model); err != nil {
-		InvalidRequest(g, model)
-		return
-	}
-
-	db := common.OpenDb()
-	result := app.GetTickets(model, db)
-
-	g.JSON(200, result)
-}

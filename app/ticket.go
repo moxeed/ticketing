@@ -96,63 +96,10 @@ func CloseTicket(ticketId uint, isSuccessful bool, db *gorm.DB) error {
 	return nil
 }
 
-func parseFilter(filterModel TicketFilterModel) (int, int, string, string) {
-	page := uint(1)
-	if filterModel.Page != nil {
-		page = *filterModel.Page
-	}
-
-	length := uint(10)
-	if filterModel.Length != nil {
-		length = *filterModel.Length
-	}
-
-	orderCol := "id"
-	if filterModel.OrderCol != nil {
-		orderCol = *filterModel.OrderCol
-	}
-
-	orderDirection := "desc"
-	if filterModel.OrderAscending != nil && *filterModel.OrderAscending {
-		orderDirection = "asc"
-	}
-
-	return int(page), int(length), orderCol, orderDirection
-}
-
 func GetTicket(ticketId uint, db *gorm.DB) TicketModel {
 	ticket := Ticket{}
 	db.First(&ticket, ticketId)
 	return convertSingle(ticket)
-}
-
-func GetTickets(filterModel TicketFilterModel, db *gorm.DB) []TicketModel {
-	page, length, orderCol, orderDirection := parseFilter(filterModel)
-
-	tickets := make([]Ticket, 0)
-
-	query := db
-
-	if filterModel.FromDateTime != nil {
-		query = query.Where("last_state_change_date > ?", *filterModel.FromDateTime)
-	}
-	if filterModel.ToDateTime != nil {
-		query = query.Where("last_state_change_date < ?", *filterModel.ToDateTime)
-	}
-	if filterModel.State != nil {
-		query = query.Where("state = ?", *filterModel.State)
-	}
-	if filterModel.Search != "" {
-		likeTerm := fmt.Sprintf("%%%s%%", filterModel.Search)
-		query = query.Where("phone_number Like ? OR user_name Like ?", likeTerm, likeTerm)
-	}
-
-	query.Order(fmt.Sprintf("%s %s", orderCol, orderDirection)).
-		Offset((page - 1) * length).
-		Limit(length).
-		Find(&tickets)
-
-	return convert(tickets)
 }
 
 func convert(tickets []Ticket) []TicketModel {

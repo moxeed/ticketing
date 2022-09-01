@@ -1,18 +1,23 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"log"
 	"ticketing/cmd"
+	"ticketing/common"
 	"ticketing/docs"
 )
 
 func main() {
 
 	docs.SwaggerInfo.Title = "ticketing"
-	router := gin.Default()
+	//docs.SwaggerInfo.Schemes = []string{"https"}
+	//docs.SwaggerInfo.Host = "api.bamis.ir/"
+	//docs.SwaggerInfo.BasePath = "communication"
+	router := gin.New()
 
 	ticket := router.Group("/ticket")
 	ticket.POST("", cmd.CreateTicket)
@@ -34,7 +39,7 @@ func main() {
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	err := router.Run("localhost:8080")
+	err := router.Run(fmt.Sprintf("localhost:%d", common.Configuration.ListenPort))
 	if err != nil {
 		log.Fatal(err)
 	}
