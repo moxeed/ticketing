@@ -14,10 +14,10 @@ import (
 
 func main() {
 
-	docs.SwaggerInfo.Title = "ticketing"
-	docs.SwaggerInfo.Schemes = []string{"https"}
-	docs.SwaggerInfo.Host = "api.bamis.ir/"
-	docs.SwaggerInfo.BasePath = "communication"
+	docs.SwaggerInfo.Title = common.Configuration.Title
+	docs.SwaggerInfo.Schemes = common.Configuration.Schemes
+	docs.SwaggerInfo.Host = common.Configuration.Host
+	docs.SwaggerInfo.BasePath = common.Configuration.BasePath
 	router := gin.New()
 
 	ticket := router.Group("/ticket")

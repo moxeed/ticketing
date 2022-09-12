@@ -1,4 +1,10 @@
 {
   "databaseDsn": "sqlserver://sa:1qaz@localhost:1433?database=Ticketing",
-  "listenPort": 9402
+  "listenPort": 9402,
+  "title": "ticketing",
+  "schemes": [
+    "https"
+  ],
+  "host": "api.bamis.ir/",
+  "basePath": "communication"
 }
