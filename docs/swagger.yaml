@@ -44,25 +44,6 @@ definitions:
       userName:
         type: string
     type: object
-  app.TicketFilterModel:
-    properties:
-      fromDateTime:
-        type: string
-      length:
-        type: integer
-      orderAscending:
-        type: boolean
-      orderCol:
-        type: string
-      page:
-        type: integer
-      search:
-        type: string
-      state:
-        type: integer
-      toDateTime:
-        type: string
-    type: object
   app.TicketModel:
     properties:
       content:
@@ -350,33 +331,6 @@ paths:
             $ref: '#/definitions/common.Error'
         "404":
           description: Not Found
-          schema:
-            $ref: '#/definitions/common.Error'
-      tags:
-      - ticket
-  /tickets:
-    post:
-      consumes:
-      - application/json
-      description: Get Tickets By Filter Model
-      parameters:
-      - description: filters
-        in: body
-        name: filterModel
-        required: true
-        schema:
-          $ref: '#/definitions/app.TicketFilterModel'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/app.TicketModel'
-            type: array
-        "400":
-          description: Bad Request
           schema:
             $ref: '#/definitions/common.Error'
       tags:

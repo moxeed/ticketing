@@ -2,11 +2,13 @@ package common
 
 import (
 	"fmt"
-	"gorm.io/driver/sqlserver"
-	"gorm.io/gorm"
-	"gorm.io/gorm/schema"
 	"log"
 	"ticketing/app"
+
+	"gorm.io/driver/sqlserver"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
 )
 
 func OpenDb() *gorm.DB {
@@ -16,6 +18,7 @@ func OpenDb() *gorm.DB {
 			SingularTable: true,
 			NoLowerCase:   true,
 		},
+		Logger: logger.Discard,
 	})
 
 	if err != nil {

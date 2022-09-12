@@ -408,48 +408,6 @@ const docTemplate = `{
                     }
                 }
             }
-        },
-        "/tickets": {
-            "post": {
-                "description": "Get Tickets By Filter Model",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "ticket"
-                ],
-                "parameters": [
-                    {
-                        "description": "filters",
-                        "name": "filterModel",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/app.TicketFilterModel"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/app.TicketModel"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/common.Error"
-                        }
-                    }
-                }
-            }
         }
     },
     "definitions": {
@@ -518,35 +476,6 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "userName": {
-                    "type": "string"
-                }
-            }
-        },
-        "app.TicketFilterModel": {
-            "type": "object",
-            "properties": {
-                "fromDateTime": {
-                    "type": "string"
-                },
-                "length": {
-                    "type": "integer"
-                },
-                "orderAscending": {
-                    "type": "boolean"
-                },
-                "orderCol": {
-                    "type": "string"
-                },
-                "page": {
-                    "type": "integer"
-                },
-                "search": {
-                    "type": "string"
-                },
-                "state": {
-                    "type": "integer"
-                },
-                "toDateTime": {
                     "type": "string"
                 }
             }

@@ -2,21 +2,22 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 	"log"
 	"ticketing/cmd"
 	"ticketing/common"
 	"ticketing/docs"
+
+	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func main() {
 
 	docs.SwaggerInfo.Title = "ticketing"
-	//docs.SwaggerInfo.Schemes = []string{"https"}
-	//docs.SwaggerInfo.Host = "api.bamis.ir/"
-	//docs.SwaggerInfo.BasePath = "communication"
+	docs.SwaggerInfo.Schemes = []string{"https"}
+	docs.SwaggerInfo.Host = "api.bamis.ir/"
+	docs.SwaggerInfo.BasePath = "communication"
 	router := gin.New()
 
 	ticket := router.Group("/ticket")
