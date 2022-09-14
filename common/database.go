@@ -11,8 +11,12 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-func OpenDb() *gorm.DB {
+var Db *gorm.DB
+
+func init() {
+
 	dsn := Configuration.DataBaseDsn
+
 	db, err := gorm.Open(sqlserver.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,
@@ -25,13 +29,6 @@ func OpenDb() *gorm.DB {
 		log.Fatal(err)
 	}
 
-	return db
-}
-
-func init() {
-
-	db := OpenDb()
-
 	if err := db.AutoMigrate(&app.Ticket{}); err != nil {
 		fmt.Print(err.Error())
 	}
@@ -43,4 +40,6 @@ func init() {
 	if err := db.AutoMigrate(&app.React{}); err != nil {
 		fmt.Print(err.Error())
 	}
+
+	Db = db
 }

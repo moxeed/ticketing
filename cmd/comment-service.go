@@ -1,10 +1,11 @@
 package cmd
 
 import (
-	"github.com/gin-gonic/gin"
 	"strconv"
 	"ticketing/app"
 	"ticketing/common"
+
+	"github.com/gin-gonic/gin"
 )
 
 // CreateComment godoc
@@ -24,9 +25,7 @@ func CreateComment(ctx *gin.Context) {
 		return
 	}
 
-	db := common.OpenDb()
-
-	result := app.CreateComment(model, db)
+	result := app.CreateComment(model, common.Db)
 	ctx.JSON(200, result)
 }
 
@@ -54,8 +53,7 @@ func ConfirmComment(ctx *gin.Context) {
 		return
 	}
 
-	db := common.OpenDb()
-	result, err := app.ConfirmComment(uint(commentId), int(userId), db)
+	result, err := app.ConfirmComment(uint(commentId), int(userId), common.Db)
 
 	if err != nil {
 		ctx.JSON(400, common.Error{Error: err.Error(), Status: 400})
@@ -89,8 +87,7 @@ func RejectComment(ctx *gin.Context) {
 		return
 	}
 
-	db := common.OpenDb()
-	result, err := app.RejectComment(uint(commentId), int(userId), db)
+	result, err := app.RejectComment(uint(commentId), int(userId), common.Db)
 
 	if err != nil {
 		ctx.JSON(400, common.Error{Error: err.Error(), Status: 400})
@@ -134,8 +131,7 @@ func ReactComment(ctx *gin.Context) {
 
 	clientId := ctx.Query("clientId")
 
-	db := common.OpenDb()
-	result, err := app.CreateReact(uint(commentId), int(userId), clientId, int(reactType), db)
+	result, err := app.CreateReact(uint(commentId), int(userId), clientId, int(reactType), common.Db)
 
 	if err != nil {
 		ctx.JSON(400, common.Error{Error: err.Error(), Status: 400})
@@ -158,8 +154,8 @@ func ReactComment(ctx *gin.Context) {
 func GetComments(ctx *gin.Context) {
 	key := ctx.Param("key")
 
-	db := common.OpenDb()
-	result := app.GetComments(key, db)
+	result := app.GetComments(key, common.Db)
 
 	ctx.JSON(200, result)
+
 }

@@ -1,5 +1,5 @@
 {  
-  "databaseDsn": "sqlserver://sa:1qaz@localhost:1433?database=Ticketing",
+  "databaseDsn": "sqlserver://Golang:UFy2fjDoUe9igCC2rnRv@37.130.202.59:1433?database=Ticketing",
   "listenPort": 8082,
   "title": "ticketing",
   "schemes": [

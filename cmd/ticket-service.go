@@ -1,10 +1,11 @@
 package cmd
 
 import (
-	"github.com/gin-gonic/gin"
 	"strconv"
 	"ticketing/app"
 	"ticketing/common"
+
+	"github.com/gin-gonic/gin"
 )
 
 func InvalidRequest(g *gin.Context, valid interface{}) {
@@ -28,8 +29,7 @@ func CreateTicket(g *gin.Context) {
 		return
 	}
 
-	db := common.OpenDb()
-	result := app.CreateTicket(model, db)
+	result := app.CreateTicket(model, common.Db)
 
 	g.JSON(200, result)
 }
@@ -61,8 +61,7 @@ func CloseTicket(g *gin.Context) {
 		return
 	}
 
-	db := common.OpenDb()
-	result := app.CloseTicket(uint(ticketId), successful, db)
+	result := app.CloseTicket(uint(ticketId), successful, common.Db)
 
 	g.JSON(200, result)
 }
@@ -84,8 +83,7 @@ func GetTicket(g *gin.Context) {
 		return
 	}
 
-	db := common.OpenDb()
-	result := app.GetTicket(uint(ticketId), db)
+	result := app.GetTicket(uint(ticketId), common.Db)
 
 	g.JSON(200, result)
 }
