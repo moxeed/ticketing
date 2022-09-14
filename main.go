@@ -18,6 +18,9 @@ func main() {
 	docs.SwaggerInfo.Schemes = common.Configuration.Schemes
 	docs.SwaggerInfo.Host = common.Configuration.Host
 	docs.SwaggerInfo.BasePath = common.Configuration.BasePath
+
+	gin.SetMode(gin.ReleaseMode)
+
 	router := gin.New()
 
 	ticket := router.Group("/ticket")
