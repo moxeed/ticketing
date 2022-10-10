@@ -177,8 +177,7 @@ func GetUserComments(ctx *gin.Context) {
 		return
 	}
 
-	db := common.OpenDb()
-	result := app.GetUserComments(int(userId), db)
+	result := app.GetUserComments(int(userId), common.Db)
 
 	ctx.JSON(200, result)
 }
