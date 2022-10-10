@@ -15,7 +15,16 @@ const (
 	UnsuccessfulClosed
 )
 
+const (
+	NoResponseFromStudent CloseReason = iota
+	InvalidTicket
+	Expired
+	InvalidContact
+	Other
+)
+
 type TicketState int
+type CloseReason int
 
 type Ticket struct {
 	gorm.Model
@@ -25,6 +34,8 @@ type Ticket struct {
 	Content             string
 	Origin              string
 	State               TicketState
+	CloseReason         *CloseReason
+	CloseDescription    *string
 	HandlerUserId       *int
 	LastStateChangeDate time.Time
 }
@@ -51,7 +62,7 @@ func (ticket *Ticket) Resolve(handlerId int) {
 	ticket.setState(Resolved)
 }
 
-func (ticket *Ticket) Close(isSuccessful bool) {
+func (ticket *Ticket) Close(isSuccessful bool, reason CloseReason, description string) {
 	if isSuccessful {
 		ticket.setState(SuccessfulClosed)
 	} else {
@@ -82,7 +93,7 @@ func CreateTicket(model TicketCreateModel, db *gorm.DB) TicketModel {
 	}
 }
 
-func CloseTicket(ticketId uint, isSuccessful bool, db *gorm.DB) error {
+func CloseTicket(ticketId uint, isSuccessful bool, closeReason CloseReason, closeDescription string, db *gorm.DB) error {
 	ticket := Ticket{}
 
 	db.First(&ticket, ticketId)
@@ -90,7 +101,7 @@ func CloseTicket(ticketId uint, isSuccessful bool, db *gorm.DB) error {
 		return fmt.Errorf("ticket Not Found")
 	}
 
-	ticket.Close(isSuccessful)
+	ticket.Close(isSuccessful, closeReason, closeDescription)
 	db.Save(&ticket)
 
 	return nil

@@ -163,3 +163,26 @@ func GetComments(ctx *gin.Context) {
 
 	ctx.JSON(200, result)
 }
+
+// GetUserComments godoc
+// @Tags        comment
+// @Description Get User Ticket
+// @Accept      json
+// @Produce     json
+// @Param       userId path  int true "User Id"
+// @Success     200 {array}  app.CommentModel
+// @Failure     400 {object} common.Error
+// @Failure     404 {object} common.Error
+// @Router      /comment/user/{userId} [get]
+func GetUserComments(ctx *gin.Context) {
+	userId, err := strconv.ParseInt(ctx.Param("userId"), 10, 0)
+	if err != nil {
+		ctx.JSON(400, common.Error{Error: "شناسه کاربر نادرست است", Status: 400})
+		return
+	}
+
+	db := common.OpenDb()
+	result := app.GetUserComments(int(userId), db)
+
+	ctx.JSON(200, result)
+}

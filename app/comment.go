@@ -17,6 +17,7 @@ type Comment struct {
 	UserId          *int
 	UserName        string
 	Content         string
+	Origin          string
 	IsConfirmed     *bool
 	LikeCount       int `gorm:"<-"`
 	DislikeCount    int `gorm:"<-"`
@@ -35,12 +36,13 @@ type React struct {
 	Comment   Comment `gorm:"foreignkey:CommentId"`
 }
 
-func NewComment(key string, userId *int, userName string, content string, replyToId *uint) Comment {
+func NewComment(key string, userId *int, userName string, content string, origin string, replyToId *uint) Comment {
 	return Comment{
 		Key:       key,
 		UserId:    userId,
 		UserName:  userName,
 		Content:   content,
+		Origin:    origin,
 		ReplyToId: replyToId,
 	}
 }
@@ -58,6 +60,7 @@ func (comment *Comment) ToModel() CommentModel {
 		UserId:       comment.UserId,
 		UserName:     comment.UserName,
 		Content:      comment.Content,
+		Origin:       comment.Origin,
 		CreatedAt:    comment.CreatedAt,
 		LikeCount:    comment.LikeCount,
 		DisLikeCount: comment.DislikeCount,
@@ -65,21 +68,29 @@ func (comment *Comment) ToModel() CommentModel {
 	}
 }
 
-func convertComments(tickets *[]Comment) []CommentModel {
+func convertComments(comments *[]Comment) []CommentModel {
 	models := make([]CommentModel, 0)
 
-	for _, ticket := range *tickets {
-		models = append(models, ticket.ToModel())
+	for _, comment := range *comments {
+		models = append(models, comment.ToModel())
 	}
 
 	return models
 }
 
 func CreateComment(model CommentCreateModel, db *gorm.DB) CommentModel {
+
+	if model.ReplyToId != nil {
+		parent := &Comment{}
+		db.Find(parent, model.ReplyToId)
+		model.Key = parent.Key
+	}
+
 	comment := NewComment(model.Key,
 		model.UserId,
 		model.UserName,
 		model.Content,
+		model.Origin,
 		model.ReplyToId)
 
 	db.Create(&comment)
@@ -146,6 +157,25 @@ func GetComments(key string, db *gorm.DB) []CommentModel {
 		Select("*").
 		Joins("LEFT JOIN (?) T ON T.CommentId = Comment.ID", subQuery).
 		Where(Comment{Key: key, IsConfirmed: &isConfirmed}).
+		Find(&comments)
+
+	return convertComments(&comments)
+}
+
+func GetUserComments(userId int, db *gorm.DB) []CommentModel {
+	comments := make([]Comment, 0)
+	isConfirmed := true
+
+	subQuery := db.Table("React").
+		Select("CommentId, "+
+			"SUM(CASE WHEN Type=? THEN 1 ELSE 0 END) AS LikeCount,"+
+			"SUM(CASE WHEN Type=? THEN 1 ELSE 0 END) AS DislikeCount", Like, Dislike).
+		Group("CommentId")
+
+	db.Model(&Comment{}).
+		Select("*").
+		Joins("LEFT JOIN (?) T ON T.CommentId = Comment.ID", subQuery).
+		Where(Comment{UserId: &userId, IsConfirmed: &isConfirmed}).
 		Find(&comments)
 
 	return convertComments(&comments)

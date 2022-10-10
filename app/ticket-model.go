@@ -22,3 +22,8 @@ type TicketCreateModel struct {
 	Content     string
 	Origin      string
 }
+
+type CloseTicketModel struct {
+	Reason      CloseReason
+	Description string
+}

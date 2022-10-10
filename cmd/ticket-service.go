@@ -41,6 +41,7 @@ func CreateTicket(g *gin.Context) {
 // @Produce      json
 // @Param        ticketId path uint true "ticket id"
 // @Param        successful query bool true "is successful"
+// @Param        closeRequest body app.CloseTicketModel true "ticket data"
 // @Success      200  {object}  app.TicketModel
 // @Failure      400  {object}  common.Error
 // @Failure      404  {object}  common.Error
@@ -49,6 +50,12 @@ func CloseTicket(g *gin.Context) {
 	var ticketId uint64
 	var successful bool
 	var err error
+
+	model := app.CloseTicketModel{}
+	if err := g.BindJSON(&model); err != nil {
+		InvalidRequest(g, model)
+		return
+	}
 
 	ticketId, err = strconv.ParseUint(g.Param("ticketId"), 10, 0)
 	if err != nil {
@@ -62,7 +69,7 @@ func CloseTicket(g *gin.Context) {
 	}
 
 	db := common.OpenDb()
-	result := app.CloseTicket(uint(ticketId), successful, db)
+	result := app.CloseTicket(uint(ticketId), successful, model.Reason, model.Description, db)
 
 	g.JSON(200, result)
 }

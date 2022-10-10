@@ -142,6 +142,15 @@ const docTemplate = `{
                         "name": "successful",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "description": "ticket data",
+                        "name": "closeRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/app.CloseTicketModel"
+                        }
                     }
                 ],
                 "responses": {
@@ -194,6 +203,52 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/app.CommentModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/comment/user/{userId}": {
+            "get": {
+                "description": "Get User Ticket",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "comment"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User Id",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/app.CommentModel"
+                            }
                         }
                     },
                     "400": {
@@ -408,51 +463,20 @@ const docTemplate = `{
                     }
                 }
             }
-        },
-        "/tickets": {
-            "post": {
-                "description": "Get Tickets By Filter Model",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "ticket"
-                ],
-                "parameters": [
-                    {
-                        "description": "filters",
-                        "name": "filterModel",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/app.TicketFilterModel"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/app.TicketModel"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/common.Error"
-                        }
-                    }
-                }
-            }
         }
     },
     "definitions": {
+        "app.CloseTicketModel": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "reason": {
+                    "type": "integer"
+                }
+            }
+        },
         "app.CommentCreateModel": {
             "type": "object",
             "properties": {
@@ -460,6 +484,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "key": {
+                    "type": "string"
+                },
+                "origin": {
                     "type": "string"
                 },
                 "replyToId": {
@@ -491,6 +518,9 @@ const docTemplate = `{
                 "likeCount": {
                     "type": "integer"
                 },
+                "origin": {
+                    "type": "string"
+                },
                 "replyToId": {
                     "type": "integer"
                 },
@@ -518,35 +548,6 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "userName": {
-                    "type": "string"
-                }
-            }
-        },
-        "app.TicketFilterModel": {
-            "type": "object",
-            "properties": {
-                "fromDateTime": {
-                    "type": "string"
-                },
-                "length": {
-                    "type": "integer"
-                },
-                "orderAscending": {
-                    "type": "boolean"
-                },
-                "orderCol": {
-                    "type": "string"
-                },
-                "page": {
-                    "type": "integer"
-                },
-                "search": {
-                    "type": "string"
-                },
-                "state": {
-                    "type": "integer"
-                },
-                "toDateTime": {
                     "type": "string"
                 }
             }
