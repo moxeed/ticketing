@@ -2,32 +2,32 @@ package common
 
 import (
 	"fmt"
-	"gorm.io/driver/sqlserver"
-	"gorm.io/gorm"
-	"gorm.io/gorm/schema"
 	"log"
 	"ticketing/app"
+
+	"gorm.io/driver/sqlserver"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
 )
 
-func OpenDb() *gorm.DB {
+var Db *gorm.DB
+
+func init() {
+
 	dsn := Configuration.DataBaseDsn
+
 	db, err := gorm.Open(sqlserver.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,
 			NoLowerCase:   true,
 		},
+		Logger: logger.Discard,
 	})
 
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	return db
-}
-
-func init() {
-
-	db := OpenDb()
 
 	if err := db.AutoMigrate(&app.Ticket{}); err != nil {
 		fmt.Print(err.Error())
@@ -40,4 +40,6 @@ func init() {
 	if err := db.AutoMigrate(&app.React{}); err != nil {
 		fmt.Print(err.Error())
 	}
+
+	Db = db
 }

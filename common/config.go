@@ -2,23 +2,28 @@ package common
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 )
 
 type Config struct {
 	DataBaseDsn string
 	ListenPort  int
+	Title       string
+	Schemes     []string
+	Host        string
+	BasePath    string
 }
 
 var Configuration Config
 
 func init() {
 	configFile, err := os.Open("./config.json")
-	defer configFile.Close()
+
 	if err != nil {
-		fmt.Println(err.Error())
+		panic(err.Error())
 	}
+	defer configFile.Close()
+
 	jsonParser := json.NewDecoder(configFile)
 	jsonParser.Decode(&Configuration)
 }
