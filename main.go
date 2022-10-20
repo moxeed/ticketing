@@ -18,6 +18,7 @@ func main() {
 	docs.SwaggerInfo.Schemes = common.Configuration.Schemes
 	docs.SwaggerInfo.Host = common.Configuration.Host
 	docs.SwaggerInfo.BasePath = common.Configuration.BasePath
+	docs.SwaggerInfo.Version = "1.0.0"
 
 	gin.SetMode(gin.ReleaseMode)
 
