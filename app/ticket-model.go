@@ -5,6 +5,7 @@ import "time"
 type TicketModel struct {
 	Id                  uint        `json:"id,omitempty"`
 	UserId              *int        `json:"userId,omitempty"`
+	ClientId            string      `json:"clientId,omitempty"`
 	UserName            string      `json:"userName,omitempty"`
 	PhoneNumber         string      `json:"phoneNumber,omitempty"`
 	Content             string      `json:"content,omitempty"`
@@ -17,6 +18,7 @@ type TicketModel struct {
 
 type TicketCreateModel struct {
 	UserId      *int
+	ClientId    string
 	UserName    string
 	PhoneNumber string
 	Content     string
