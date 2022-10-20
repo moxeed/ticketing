@@ -47,3 +47,9 @@ jobs:
         asset_path: ./store.win.zip
         asset_name: store.win.zip
         asset_content_type: application/gzip
+    - name: Azure Pipelines Action
+      uses: Azure/pipelines@v1.2
+      with:
+        azure-devops-project-url: https://dev.mykanoon.ir/KanoonCollection/Kanoon%20Online
+        azure-pipeline-name: Ticketing Release
+        azure-devops-token: ${{ secrets.AZURE_DEVOPS_TOKEN }}
