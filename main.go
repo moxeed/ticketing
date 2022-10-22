@@ -30,6 +30,7 @@ func main() {
 
 	comment := router.Group("/comment")
 	comment.GET(":key", cmd.GetComments)
+	comment.GET("/user/:userId", cmd.GetUserComments)
 	comment.POST("", cmd.CreateComment)
 	comment.POST(":commentId/react", cmd.ReactComment)
 
