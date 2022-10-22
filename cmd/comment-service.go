@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"log"
 	"strconv"
 	"ticketing/app"
 	"ticketing/common"
@@ -172,7 +171,6 @@ func GetComments(ctx *gin.Context) {
 // @Failure     404 {object} common.Error
 // @Router      /comment/user/{userId} [get]
 func GetUserComments(ctx *gin.Context) {
-	log.Println("sjdksd")
 	userId, err := strconv.ParseInt(ctx.Param("userId"), 10, 0)
 	if err != nil {
 		ctx.JSON(400, common.Error{Error: "شناسه کاربر نادرست است", Status: 400})
