@@ -3,6 +3,7 @@ package app
 import (
 	"fmt"
 	"gorm.io/gorm"
+	"io/ioutil"
 	"time"
 )
 
@@ -164,19 +165,10 @@ func GetComments(key string, db *gorm.DB) []CommentModel {
 
 func GetUserComments(userId int, db *gorm.DB) []CommentModel {
 	comments := make([]Comment, 0)
-	isConfirmed := true
 
-	subQuery := db.Table("React").
-		Select("CommentId, "+
-			"SUM(CASE WHEN Type=? THEN 1 ELSE 0 END) AS LikeCount,"+
-			"SUM(CASE WHEN Type=? THEN 1 ELSE 0 END) AS DislikeCount", Like, Dislike).
-		Group("CommentId")
-
-	db.Model(&Comment{}).
-		Select("*").
-		Joins("LEFT JOIN (?) T ON T.CommentId = Comment.ID", subQuery).
-		Where(Comment{UserId: &userId, IsConfirmed: &isConfirmed}).
-		Find(&comments)
+	file, _ := ioutil.ReadFile("./query/UserComments.sql")
+	db.Raw(string(file), userId).
+		Scan(&comments)
 
 	return convertComments(&comments)
 }
