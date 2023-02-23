@@ -23,6 +23,8 @@ jobs:
       
     - name: Copy Config
       run: cp ./config.json ./build/
+    - name: Copy Query
+      run: cp ./query/* ./build/query/
     - name: Zip build
       run: tar -a -c -f store.win.zip -C ./build *
     - name: Get current date
